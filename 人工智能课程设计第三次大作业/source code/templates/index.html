@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="{{url_for('static',filename='jquery.js')}}"></script>
+    <style>
+        body {
+            background-color: rgba(187, 183, 160, 0.473);
+        }
+
+        #top_div{
+            position: absolute;
+            top: 4%;
+            left: 24%;
+            overflow: hidden;
+            width: 52%;
+            height: 12%;
+            background: rgba(189, 233, 247, 0.425);
+            border-radius: 5px;
+            -webkit-transform: translate3d(-100%, 0, 0);
+            transform: translate3d(-0%, 0, 0);
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        #div0 {
+            float: left;
+            position: absolute;
+            top: 20%;
+            left: 10%;
+            overflow: hidden;
+            width: 28%;
+            height: 42%;
+            background: rgba(189, 233, 247, 0.425);
+            border-radius: 5px;
+            -webkit-transform: translate3d(-100%, 0, 0);
+            transform: translate3d(-0%, 0, 0);
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        #div2 {
+            float: left;
+            position: absolute;
+            top: 66%;
+            left: 10%;
+            overflow: hidden;
+            width: 28%;
+            height: 26%;
+            background: rgba(189, 233, 247, 0.425);
+            border-radius: 5px;
+            -webkit-transform: translate3d(-100%, 0, 0);
+            transform: translate3d(-0%, 0, 0);
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        #div3 {
+            float: right;
+            position: absolute;
+            top: 20%;
+            right: 10%;
+            overflow: hidden;
+            width: 46%;
+            height: 12%;
+            background: rgba(189, 234, 247, 0);
+            border-radius: 5px;
+            -webkit-transform: translate3d(-100%, 0, 0);
+            transform: translate3d(-0%, 0, 0);
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0);
+        }
+
+        #div1 {
+            float: right;
+            position: absolute;
+            top: 36%;
+            right: 10%;
+            overflow: hidden;
+            width: 46%;
+            height: 56%;
+            background: rgba(189, 233, 247, 0.425);
+            border-radius: 5px;
+            -webkit-transform: translate3d(-100%, 0, 0);
+            transform: translate3d(-0%, 0, 0);
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            font-size: 24px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            outline: none;
+            color: #fff;
+            background-color: #04263d;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 9px #999;
+        }
+
+        .button:hover {
+            background-color: #054977
+        }
+
+        .button:active {
+            background-color: #054977;
+            box-shadow: 0 5px #666;
+            transform: translateY(4px);
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="top_div">
+        <h1 style="text-align:center;">子句归结实验</h1>
+    </div>
+    <div id="div0">
+        <div style="width: 100%; height: 24%;">
+            <h1 style="text-align:center;">子句集输入(#结尾)</h1>
+        </div>
+        <div style="width: 100%; height: 76%;"> 
+            <textarea style="width: 84%; height: 72%; margin-left: 8%;" id="textarea">Kill(C,A)|Kill(B,A)|Kill(A,A)&#10;Hate(x1,A)|!Kill(x1,A)&#10;!Hate(C,x2)|!Hate(A,x2)&#10;Hate(A,A)&#10;Hate(A,C)&#10;Richer(x3,A)|Hate(B,x3)&#10;!Richer(x4,A)|!Hate(B,x4)&#10;Hate(A,x5)|!Hate(B,x5)&#10;!Hate(A,x6)|Hate(B,x6)&#10;!Hate(A,A)|!Hate(A,B)|!Hate(A,C)&#10;!Hate(B,A)|!Hate(B,B)|!Hate(B,C)&#10;!Hate(C,A)|!Hate(C,B)|!Hate(C,C)&#10;!Richer(x7,A)|!Kill(x7,A)&#10;#</textarea>
+        </div>
+    </div>
+    <div id="div2">
+        <div style="width: 100%; height: 36%;">
+            <h1 style="text-align:center;">目标输入</h1>
+        </div>
+        <div style="width: 100%; height: 64%;"> 
+            <input style="width: 84%; margin-left: 8%; height: 24%;" type="text" name="input" id="input" value="Kill(A,A)">
+        </div>
+    </div>
+    <div id="div3">
+        <div style="margin-left: 12%; width: 42%; margin-top: 16px;">
+            <button onclick="get_result()" class="button">开始归结</button>
+            <button onclick="del()" class="button" style="float: right;">清除</button>
+        </div>
+    </div>
+    <div id="div1">
+        <div style="width: 100%;">
+            <h1 style="text-align:center;" id="answer">点击上方按钮查看归结结果</h1>
+        </div>
+        <textarea style="width: 84%; height: 70%; margin-left: 8%; margin-top: 2%;" id="p"></textarea>
+    </div>
+    <script>
+        var textarea=document.getElementById("textarea");
+        var input=document.getElementById("input");
+        var p=document.getElementById("p");
+        var answer1=document.getElementById("answer");
+        var aaa;
+        function get_result(){
+            // console.log(textarea.value);
+            // console.log(input.value);
+            $.ajax({
+                url: "/2",
+                data: {
+                    "input": input.value, "textarea": textarea.value
+                },
+                type: "post",
+                success: function (data) {
+                    console.log(data);
+                    aaa=data["result"];
+                    p.value=aaa;
+                    answer1.innerHTML=data["answer"];
+                }
+            })
+        }
+
+        function del(){
+            textarea.value="";
+            input.value="";
+            answer1.innerHTML="点击上方按钮查看归结结果";
+            p.value="";
+        }
+    </script>
+</body>
+
+</html>
